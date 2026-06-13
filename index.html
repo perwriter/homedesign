@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Becca's Rental List — Premium NYC Apartments</title>
+  <!-- Tailwind + Google Fonts + subtle animation support -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,600;14..32,700;14..32,800&display=swap" rel="stylesheet">
+  <style>
+    * { font-family: 'Inter', system-ui, -apple-system, sans-serif; }
+    /* Smooth scroll + interactive transitions */
+    html { scroll-behavior: smooth; }
+    .card-hover {
+      transition: all 0.25s ease-in-out;
+    }
+    .card-hover:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 15px 25px -10px rgba(0, 0, 0, 0.1);
+    }
+    .filter-btn, .sort-btn {
+      transition: all 0.2s ease;
+    }
+    .filter-btn:hover, .sort-btn:hover {
+      border-color: #c084fc;
+      background-color: #faf5ff;
+    }
+    summary::-webkit-details-marker { display: none; }
+    /* heart animation */
+    .like-btn {
+      transition: transform 0.2s ease, background 0.2s;
+    }
+    .like-btn:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.95);
+    }
+    /* custom scrollbar */
+    .custom-scroll::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    .custom-scroll::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 10px;
+    }
+    .custom-scroll::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 10px;
+    }
+    /* ensure 5 cards row on large screens with tighter gap */
+    @media (min-width: 1280px) {
+      .grid-five-cards {
+        gap: 0.75rem !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-gray-100 text-slate-800 antialiased">
+
+  <!-- Header: elevated sticky with refined blur and shadow -->
+  <header class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200/80 shadow-sm">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 h-20 flex items-center justify-between">
+      <!-- Logo area: improved hierarchy & spacing -->
+      <div class="flex flex-col leading-tight">
+        <h1 class="text-4xl sm:text-5xl font-black tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Becca’s</h1>
+        <p class="text-purple-600 tracking-[0.3em] font-extrabold text-[11px] sm:text-xs uppercase">RENTAL LIST</p>
+      </div>
+
+      <!-- right profile icon + subtle hover effect -->
+      <div class="flex items-center gap-3">
+        <div class="w-11 h-11 rounded-full bg-gradient-to-br from-purple-600 to-indigo-600 text-white flex items-center justify-center font-bold shadow-md hover:shadow-lg transition cursor-default">
+          PM
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero: REDUCED HEIGHT BANNER (compact but still impactful) -->
+  <section class="relative">
+    <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/30 z-10"></div>
+    <img
+      src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1600&q=80"
+      class="w-full h-[240px] sm:h-[280px] lg:h-[320px] object-cover object-[50%_35%]"
+      alt="Skyline view of New York apartments at dusk"
+    />
+    <div class="absolute inset-0 z-20 flex flex-col items-center justify-center px-4 text-center">
+      <div class="max-w-4xl">
+        <h2 class="text-3xl sm:text-5xl lg:text-6xl font-black leading-tight tracking-tight text-white drop-shadow-lg">
+          Find Your Space,<br class="sm:hidden" /> Set Your Pace.
+        </h2>
+        <p class="mt-3 text-sm sm:text-lg font-medium text-white/90 max-w-2xl mx-auto backdrop-blur-sm bg-black/20 px-4 py-1.5 rounded-2xl inline-block">
+          Access exclusive rentals • verified listings • direct landlord contact
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main content: card overlap effect -->
+  <main class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 -mt-12 relative z-30 pb-14">
+
+    <!-- Improved Toolbar: cleaner, active filters demo -->
+    <section class="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl border border-slate-200/80 p-5 sm:p-7 transition-all">
+      
+      <!-- Top filter row: dropdown buttons with better UX -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Borough dropdown simulation -->
+        <div class="relative group">
+          <button class="filter-btn w-full h-14 rounded-xl border border-slate-200 bg-white px-4 flex items-center justify-between text-left hover:shadow-sm transition">
+            <span class="flex items-center gap-3">
+              <span class="text-xl">🗽</span>
+              <span class="font-semibold text-slate-700">All Boroughs</span>
+            </span>
+            <span class="text-slate-400 text-lg transition-transform group-hover:translate-y-0.5">⌄</span>
+          </button>
+        </div>
+        
+        <div class="relative group">
+          <button class="filter-btn w-full h-14 rounded-xl border border-slate-200 bg-white px-4 flex items-center justify-between text-left hover:shadow-sm">
+            <span class="flex items-center gap-3">
+              <span class="text-xl">🏘️</span>
+              <span class="font-semibold text-slate-700">All Neighborhoods</span>
+            </span>
+            <span class="text-slate-400 text-lg">⌄</span>
+          </button>
+        </div>
+
+        <!-- Search + clear with better spacing -->
+        <div class="flex gap-3">
+          <div class="h-14 rounded-xl border border-slate-200 bg-white px-4 flex items-center gap-3 flex-1 focus-within:ring-2 focus-within:ring-purple-300 focus-within:border-purple-400 transition">
+            <span class="text-slate-400 text-lg">🔍</span>
+            <input
+              type="text"
+              placeholder="Search by keyword, address, or amenity"
+              class="bg-transparent outline-none w-full text-sm sm:text-base font-medium placeholder:text-slate-400"
+            />
+          </div>
+          <button class="w-14 h-14 rounded-xl border border-slate-200 bg-white text-2xl hover:bg-purple-50 hover:border-purple-300 transition flex items-center justify-center">
+            ✕
+          </button>
+        </div>
+      </div>
+
+      <!-- Advanced + Sort row with cleaner colors -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-5">
+        <button class="h-12 rounded-xl border border-slate-200 bg-slate-50 hover:bg-purple-50 flex items-center justify-center gap-2 font-semibold transition-all hover:border-purple-300 group">
+          <span class="text-purple-700 text-lg group-hover:scale-105 transition">⚙️</span>
+          <span>Advanced Filters</span>
+        </button>
+        <button class="h-12 rounded-xl border border-slate-200 bg-white px-5 font-semibold flex items-center justify-center gap-2 hover:bg-slate-50 transition">
+          <span>Sort by: Newest</span>
+          <span class="text-slate-500 text-sm">⌄</span>
+        </button>
+      </div>
+
+      <!-- Quick Menu (details drop-down) redesigned: better UI & typography. "Home & Dashboard" has been removed. -->
+      <details class="mt-6 group rounded-2xl border border-purple-100 bg-white shadow-sm overflow-hidden">
+        <summary class="cursor-pointer list-none h-16 px-6 flex items-center justify-between font-extrabold text-slate-800 hover:bg-purple-50/50 transition">
+          <span class="flex items-center gap-3">
+            <span class="text-purple-600 text-2xl">☰</span>
+            <span class="text-lg">Quick Navigation</span>
+          </span>
+          <span class="transition-transform duration-200 group-open:rotate-180 text-purple-500 text-xl">⌄</span>
+        </summary>
+
+        <div class="border-t border-purple-100 divide-y divide-slate-100">
+          <!-- Rent Stabilized Submenu (First item now) -->
+          <details class="group/rent">
+            <summary class="cursor-pointer list-none px-6 py-4 flex items-center justify-between hover:bg-purple-50/40 transition">
+              <span class="flex items-center gap-3 font-semibold">
+                <span class="text-purple-600">📌</span>
+                Rent Stabilized Listings + Mapping
+              </span>
+              <span class="transition-transform group-open/rent:rotate-180 text-slate-400 text-lg">⌄</span>
+            </summary>
+            <div class="bg-slate-50/80 px-6 pb-5 pt-2">
+              <div class="ml-8 grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+                <a href="#" class="rounded-xl px-3 py-2 text-center font-medium bg-white border border-slate-200 hover:border-purple-300 hover:shadow-sm transition">Manhattan</a>
+                <a href="#" class="rounded-xl px-3 py-2 text-center font-medium bg-white border border-slate-200 hover:border-purple-300">Brooklyn</a>
+                <a href="#" class="rounded-xl px-3 py-2 text-center font-medium bg-white border border-slate-200 hover:border-purple-300">Queens</a>
+                <a href="#" class="rounded-xl px-3 py-2 text-center font-medium bg-white border border-slate-200 hover:border-purple-300">Bronx</a>
+                <a href="#" class="rounded-xl px-3 py-2 text-center font-medium bg-white border border-slate-200 hover:border-purple-300">Staten Island</a>
+              </div>
+            </div>
+          </details>
+
+          <!-- Tenant Resources improved layout -->
+          <details class="group/resources">
+            <summary class="cursor-pointer list-none px-6 py-4 flex items-center justify-between hover:bg-purple-50/40 transition">
+              <span class="flex items-center gap-3 font-semibold">
+                <span class="text-purple-600">📚</span>
+                Tenant Resources & Guides
+              </span>
+              <span class="transition-transform group-open/resources:rotate-180 text-slate-400 text-lg">⌄</span>
+            </summary>
+            <div class="bg-slate-50/80 px-6 pb-5 pt-2">
+              <div class="ml-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                <a href="#" class="rounded-xl px-4 py-2.5 bg-white border border-slate-200 font-medium hover:bg-purple-50 flex items-center gap-2">📄 NYS & NYC Resources</a>
+                <a href="#" class="rounded-xl px-4 py-2.5 bg-white border border-slate-200 font-medium hover:bg-purple-50 flex items-center gap-2">🎲 NYC Apartment Lottery</a>
+                <a href="#" class="rounded-xl px-4 py-2.5 bg-white border border-slate-200 font-medium hover:bg-purple-50 flex items-center gap-2">🤝 Broker Info & Tips</a>
+                <a href="#" class="rounded-xl px-4 py-2.5 bg-white border border-slate-200 font-medium hover:bg-purple-50 flex items-center gap-2">🔍 Rent Stabilized Status</a>
+              </div>
+            </div>
+          </details>
+        </div>
+      </details>
+    </section>
+
+    <!-- Featured Listings: 5 cards in a row (grid with reduced gap) -->
+    <section class="mt-12 pb-8">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+        <div>
+          <h3 class="text-3xl sm:text-4xl font-extrabold tracking-tight bg-gradient-to-r from-slate-800 to-slate-600 bg-clip-text text-transparent">Featured Listings</h3>
+          <p class="text-slate-500 text-sm mt-1">Handpicked apartments across NYC</p>
+        </div>
+        <a href="#" class="text-purple-700 font-bold text-lg flex items-center gap-1 hover:gap-2 transition-all group">View all <span class="group-hover:translate-x-1 transition">→</span></a>
+      </div>
+
+      <!-- 5 cards grid with minimal gap (gap-2 = 0.5rem gap) to reduce space between cards -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 lg:gap-3">
+        <!-- Card 1 -->
+        <article class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover transition-all duration-300 flex flex-col h-full">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=600&q=80" class="h-48 w-full object-cover transition-transform duration-500 hover:scale-105" alt="Modern one bedroom apartment" />
+            <button class="like-btn absolute top-2 right-2 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full shadow-md flex items-center justify-center text-sm hover:text-red-500 transition">
+              ♡
+            </button>
+            <span class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">🔥 Hot Deal</span>
+          </div>
+          <div class="p-3 flex-1 flex flex-col">
+            <div class="flex items-center justify-between flex-wrap gap-1">
+              <p class="text-xl font-black">$2,795 <span class="text-xs font-normal text-slate-500">/mo</span></p>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">1 BR</span>
+            </div>
+            <h4 class="mt-2 font-extrabold text-base tracking-tight">1BR in East Harlem</h4>
+            <p class="mt-0.5 text-slate-500 flex items-center gap-1 text-xs">📍 East Harlem, Manhattan</p>
+            <div class="flex items-center gap-2 mt-2 text-xs text-slate-500">
+              <span>🛁 1 bath</span>
+              <span>📐 650 sqft</span>
+            </div>
+            <div class="flex gap-1.5 mt-2 flex-wrap">
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px] font-medium">Pets</span>
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px] font-medium">Laundry</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 2 -->
+        <article class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover transition-all duration-300 flex flex-col h-full">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=600&q=80" class="h-48 w-full object-cover transition-transform duration-500 hover:scale-105" alt="Spacious two bedroom" />
+            <button class="like-btn absolute top-2 right-2 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full shadow-md flex items-center justify-center text-sm hover:text-red-500 transition">
+              ♡
+            </button>
+          </div>
+          <div class="p-3 flex-1 flex flex-col">
+            <div class="flex items-center justify-between flex-wrap gap-1">
+              <p class="text-xl font-black">$3,995 <span class="text-xs font-normal text-slate-500">/mo</span></p>
+              <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-bold">2 BR</span>
+            </div>
+            <h4 class="mt-2 font-extrabold text-base">2BR in East Harlem</h4>
+            <p class="mt-0.5 text-slate-500 text-xs">📍 East Harlem, Manhattan</p>
+            <div class="flex gap-2 mt-2 text-xs text-slate-500">
+              <span>🛁 1.5 ba</span> <span>📐 880 ft²</span>
+            </div>
+            <div class="flex gap-1.5 mt-2">
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px]">Elevator</span>
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px]">Dishwasher</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 3 -->
+        <article class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover transition-all duration-300 flex flex-col h-full">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=600&q=80" class="h-48 w-full object-cover transition-transform duration-500 hover:scale-105" alt="Three bedroom apartment" />
+            <button class="like-btn absolute top-2 right-2 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full shadow-md flex items-center justify-center text-sm hover:text-red-500 transition">
+              ♡
+            </button>
+          </div>
+          <div class="p-3 flex-1 flex flex-col">
+            <div class="flex items-center justify-between">
+              <p class="text-xl font-black">$4,995 <span class="text-xs font-normal text-slate-500">/mo</span></p>
+              <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-bold">3 BR</span>
+            </div>
+            <h4 class="mt-2 font-extrabold text-base">3BR in East Harlem</h4>
+            <p class="mt-0.5 text-slate-500 text-xs">📍 East Harlem, Manhattan</p>
+            <div class="mt-2 flex items-center gap-2 text-xs text-purple-700 font-medium">
+              <span>✨ Rent Stabilized</span>
+            </div>
+            <div class="flex gap-1.5 mt-2">
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px]">Family-friendly</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 4 -->
+        <article class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover transition-all duration-300 flex flex-col h-full">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1560185127-6ed189bf02f4?auto=format&fit=crop&w=600&q=80" class="h-48 w-full object-cover transition-transform duration-500 hover:scale-105" alt="West village luxury" />
+            <button class="like-btn absolute top-2 right-2 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full shadow-md flex items-center justify-center text-sm hover:text-red-500 transition">
+              ♡
+            </button>
+            <span class="absolute bottom-2 left-2 bg-amber-500/90 text-black text-[10px] px-2 py-0.5 rounded-full font-bold">⭐ Premium</span>
+          </div>
+          <div class="p-3 flex-1 flex flex-col">
+            <div class="flex items-center justify-between">
+              <p class="text-xl font-black">$7,995 <span class="text-xs font-normal text-slate-500">/mo</span></p>
+              <span class="text-[10px] bg-slate-100 px-2 py-0.5 rounded-full font-bold">3 BR</span>
+            </div>
+            <h4 class="mt-2 font-extrabold text-base">3BR in West Village</h4>
+            <p class="mt-0.5 text-slate-500 text-xs">📍 West Village, Manhattan</p>
+            <div class="flex gap-1.5 mt-2 flex-wrap">
+              <span class="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded-md text-[10px] font-medium">Doorman</span>
+              <span class="bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded-md text-[10px] font-medium">Rooftop</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- Card 5 (New additional listing to complete 5 cards row) -->
+        <article class="bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm card-hover transition-all duration-300 flex flex-col h-full">
+          <div class="relative overflow-hidden">
+            <img src="https://images.unsplash.com/photo-1580587771525-78b9dba3b914?auto=format&fit=crop&w=600&q=80" class="h-48 w-full object-cover transition-transform duration-500 hover:scale-105" alt="Modern studio with city view" />
+            <button class="like-btn absolute top-2 right-2 bg-white/90 backdrop-blur-sm w-8 h-8 rounded-full shadow-md flex items-center justify-center text-sm hover:text-red-500 transition">
+              ♡
+            </button>
+            <span class="absolute bottom-2 left-2 bg-black/60 backdrop-blur-sm text-white text-[10px] px-2 py-0.5 rounded-full font-semibold">🎯 No Fee</span>
+          </div>
+          <div class="p-3 flex-1 flex flex-col">
+            <div class="flex items-center justify-between flex-wrap gap-1">
+              <p class="text-xl font-black">$2,495 <span class="text-xs font-normal text-slate-500">/mo</span></p>
+              <span class="text-[10px] bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-full font-bold">Studio</span>
+            </div>
+            <h4 class="mt-2 font-extrabold text-base">Sunny Studio in Harlem</h4>
+            <p class="mt-0.5 text-slate-500 flex items-center gap-1 text-xs">📍 Central Harlem, Manhattan</p>
+            <div class="flex items-center gap-2 mt-2 text-xs text-slate-500">
+              <span>🛁 1 bath</span>
+              <span>📐 520 sqft</span>
+            </div>
+            <div class="flex gap-1.5 mt-2 flex-wrap">
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px] font-medium">Near Subway</span>
+              <span class="bg-slate-100 px-1.5 py-0.5 rounded-md text-[10px] font-medium">Pets OK</span>
+            </div>
+          </div>
+        </article>
+      </div>
+      
+      <!-- CTA / extra info to improve engagement -->
+      <div class="mt-10 bg-gradient-to-r from-purple-50 to-indigo-50 rounded-2xl p-5 border border-purple-100 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <h4 class="text-lg font-black text-slate-800">Looking for rent-stabilized gems?</h4>
+          <p class="text-slate-600 text-sm">Explore our verified RS listings with interactive mapping tools.</p>
+        </div>
+        <a href="#" class="bg-purple-700 hover:bg-purple-800 text-white font-bold px-5 py-2.5 rounded-xl transition shadow-md hover:shadow-lg text-sm flex items-center gap-2">Explore Rent Stabilized →</a>
+      </div>
+    </section>
+
+    <!-- trust signals compact row -->
+    <div class="border-t border-slate-200 pt-8 mt-6 text-center text-xs text-slate-500 flex flex-wrap justify-between items-center gap-3">
+      <p class="flex items-center gap-2"><span class="text-purple-600 text-sm">✓</span> Verified listings updated daily</p>
+      <p class="flex items-center gap-2"><span class="text-purple-600 text-sm">🏆</span> 10,000+ happy renters</p>
+      <p class="flex items-center gap-2"><span class="text-purple-600 text-sm">🔒</span> Direct landlord contact</p>
+    </div>
+  </main>
+  
+  <!-- footer simple but refined -->
+  <footer class="bg-white border-t border-slate-200 mt-6">
+    <div class="max-w-7xl mx-auto px-5 sm:px-8 lg:px-10 py-6 flex flex-col sm:flex-row justify-between text-xs text-slate-500">
+      <p>© 2025 Becca’s Rental List — Your trusted NYC rental companion</p>
+      <div class="flex gap-5 mt-2 sm:mt-0">
+        <a href="#" class="hover:text-purple-700 transition">Privacy</a>
+        <a href="#" class="hover:text-purple-700 transition">Terms</a>
+        <a href="#" class="hover:text-purple-700 transition">Contact</a>
+      </div>
+    </div>
+  </footer>
+</body>
+</html>
