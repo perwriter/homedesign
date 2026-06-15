@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <title>Becca's Rental List | Premium Rentals</title>
+  <title>Becca's Rental List | Map inside Advanced Settings</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     /* custom bottom sheet animations - HIGH Z-INDEX priority */
@@ -18,7 +18,7 @@
       box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.2);
       transform: translateY(100%);
       transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-      z-index: 2000; /* increased z-index to ensure dropdowns/sheets appear on top of everything */
+      z-index: 2000;
       max-height: 85vh;
       overflow-y: auto;
     }
@@ -30,7 +30,7 @@
       inset: 0;
       background: rgba(0, 0, 0, 0.5);
       backdrop-filter: blur(4px);
-      z-index: 1999; /* just below sheet but above all page content */
+      z-index: 1999;
       opacity: 0;
       visibility: hidden;
       transition: opacity 0.25s ease, visibility 0.2s;
@@ -39,7 +39,6 @@
       opacity: 1;
       visibility: visible;
     }
-    /* drag handle */
     .drag-handle {
       width: 48px;
       height: 5px;
@@ -47,7 +46,6 @@
       border-radius: 999px;
       margin: 12px auto 8px;
     }
-    /* improved touch targets and active states */
     .sheet-option {
       cursor: pointer;
       transition: background 0.15s;
@@ -63,7 +61,7 @@
         touch-action: manipulation;
       }
     }
-    /* Custom card grid spacing: closer rows, balanced design */
+    /* Balanced card grid: closer rows */
     .listings-grid {
       display: grid;
       grid-template-columns: repeat(1, 1fr);
@@ -98,7 +96,6 @@
         row-gap: 1.75rem;
       }
     }
-    /* card internal improvements */
     .rental-card {
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
@@ -106,15 +103,17 @@
       transform: translateY(-3px);
       box-shadow: 0 12px 25px -8px rgba(0,0,0,0.1);
     }
-    /* dropdowns that appear (desktop hover) have high z-index as well */
-    .relative.group .dropdown-menu {
-      z-index: 300;
+    /* Map preview inside sheet */
+    .map-placeholder {
+      background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
+      border-radius: 1rem;
+      transition: all 0.2s;
     }
   </style>
 </head>
 <body class="bg-slate-100 text-slate-900 antialiased">
 
-  <!-- Header: clean, sticky -->
+  <!-- Header -->
   <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-sm">
     <div class="max-w-[1500px] mx-auto px-4 sm:px-6 h-16 md:h-20 flex items-center justify-between">
       <div class="flex flex-col leading-tight">
@@ -142,10 +141,10 @@
 
   <main class="max-w-[1500px] mx-auto px-3 sm:px-4 -mt-12 md:-mt-16 relative z-20">
 
-    <!-- Toolbar section: desktop (clean) + mobile integrated bottom sheet triggers -->
+    <!-- Toolbar section -->
     <section class="bg-white rounded-xl shadow-md border border-slate-200 p-3 md:p-4 transition mb-6">
       
-      <!-- DESKTOP TOOLBAR: unchanged, high z-index for dropdowns already ensured -->
+      <!-- DESKTOP TOOLBAR: map view icon on second row stays (desktop keeps map) -->
       <div class="hidden md:block">
         <div class="grid grid-cols-[1fr_1fr_1.2fr_48px] gap-3">
           <button class="h-11 rounded-lg bg-slate-50 border border-slate-200 px-4 flex items-center justify-between text-sm font-medium hover:bg-slate-100"> <span>All Boroughs</span> <span class="text-slate-500 text-base">▼</span> </button>
@@ -156,8 +155,13 @@
           </div>
           <button class="h-11 rounded-lg bg-slate-50 border border-slate-200 text-xl font-medium hover:bg-slate-100">✕</button>
         </div>
-        <div class="mt-3 grid grid-cols-[auto_auto_auto_1fr_1fr] gap-3 items-start">
+        <div class="mt-3 grid grid-cols-[auto_auto_auto_auto_1fr_1fr] gap-3 items-start">
           <button class="h-11 px-4 rounded-lg bg-slate-50 border border-slate-200 text-sm font-semibold flex items-center gap-1">Sort by: Newest <span class="text-slate-500 text-xs">▼</span></button>
+          <!-- Map View Icon Button (desktop remains independent) -->
+          <button id="desktopMapViewBtn" class="h-11 px-4 rounded-lg hover:bg-slate-50 text-sm font-semibold flex items-center gap-1.5 border border-transparent hover:border-slate-200 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+            Map View
+          </button>
           <button class="h-11 px-4 rounded-lg hover:bg-slate-50 text-sm font-semibold flex items-center gap-1.5 border border-transparent hover:border-slate-200">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
             Advanced Search
@@ -168,7 +172,7 @@
         </div>
       </div>
 
-      <!-- MOBILE TOOLBAR: two buttons open bottom sheets (High z-index ensured) -->
+      <!-- MOBILE TOOLBAR: Only TWO buttons (Advanced Search + Quick Menu) as requested -->
       <div class="md:hidden space-y-3">
         <!-- Search row -->
         <div class="flex items-center gap-2">
@@ -179,7 +183,7 @@
           <button class="h-12 w-12 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center text-xl">✕</button>
         </div>
 
-        <!-- Two big action buttons: ADVANCED SEARCH & QUICK MENU (both open bottom sheets with high zIndex) -->
+        <!-- Two buttons only: Advanced Search + Quick Menu (map moved inside Advanced Search) -->
         <div class="grid grid-cols-1 gap-2">
           <button id="mobileAdvancedBtn" class="mobile-toolbar-btn h-12 rounded-xl bg-white border border-slate-200 font-semibold text-sm flex items-center justify-center gap-2 shadow-sm active:bg-slate-50 transition">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
@@ -193,12 +197,10 @@
       </div>
     </section>
 
-    <!-- LISTINGS SECTIONS: Balanced rows, cards closer together with refined grid -->
-    <!-- Section 1: Featured Listings -->
+    <!-- LISTINGS SECTION: all balanced grid, no "Just Added" heading -->
     <div class="mb-8">
       <h3 class="text-xl md:text-2xl font-extrabold mb-4 md:mb-5 tracking-tight">Featured Rentals</h3>
       <div class="listings-grid">
-        <!-- Card 1 -->
         <article class="rental-card bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all">
           <div class="relative"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=700&q=80" class="h-48 w-full object-cover" alt="apartment" /><button class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-slate-600 text-lg">♥</button></div>
           <div class="p-4"><div class="flex items-center justify-between"><p class="text-2xl font-extrabold">$2,795<span class="text-sm font-medium text-slate-500">/mo</span></p><span class="text-xs bg-slate-100 rounded-full px-3 py-1 font-semibold">One Bedroom</span></div><h4 class="mt-2 font-extrabold text-base truncate">1 Bedroom in East Harlem</h4><p class="text-slate-500 text-sm mt-1 flex items-center gap-1"><svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>East Harlem, Manhattan</p></div>
@@ -219,13 +221,6 @@
           <div class="relative"><img src="https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?auto=format&fit=crop&w=700&q=80" class="h-48 w-full object-cover" alt="apartment" /><button class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-lg">♥</button></div>
           <div class="p-4"><div class="flex items-center justify-between"><p class="text-2xl font-extrabold">$7,995<span class="text-sm font-medium text-slate-500">/mo</span></p><span class="text-xs bg-slate-100 rounded-full px-3 py-1 font-semibold">Three Bedroom</span></div><h4 class="mt-2 font-extrabold text-base truncate">3 Bedrooms in West Village</h4><p class="text-slate-500 text-sm mt-1 flex items-center gap-1"><svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>West Village, Manhattan</p></div>
         </article>
-      </div>
-    </div>
-
-    <!-- Section 2: Just Added (balance spacing) -->
-    <div class="mb-8">
-      <h3 class="text-xl md:text-2xl font-extrabold mb-4 md:mb-5 tracking-tight">Just Added</h3>
-      <div class="listings-grid">
         <article class="rental-card bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all"><div class="relative"><img src="https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?auto=format&fit=crop&w=700&q=80" class="h-48 w-full object-cover" alt="apartment" /><button class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-lg">♥</button></div><div class="p-4"><div class="flex items-center justify-between"><p class="text-2xl font-extrabold">$2,595<span class="text-sm font-medium text-slate-500">/mo</span></p><span class="text-xs bg-slate-100 rounded-full px-3 py-1 font-semibold">One Bedroom</span></div><h4 class="mt-2 font-extrabold text-base truncate">Cozy 1BR in Astoria</h4><p class="text-slate-500 text-sm mt-1">Astoria, Queens</p></div></article>
         <article class="rental-card bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all"><div class="relative"><img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=700&q=80" class="h-48 w-full object-cover" alt="apartment" /><button class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-lg">♥</button></div><div class="p-4"><div class="flex items-center justify-between"><p class="text-2xl font-extrabold">$3,450<span class="text-sm font-medium text-slate-500">/mo</span></p><span class="text-xs bg-slate-100 rounded-full px-3 py-1 font-semibold">Two Bedroom</span></div><h4 class="mt-2 font-extrabold text-base truncate">Modern 2BR in LIC</h4><p class="text-slate-500 text-sm mt-1">Long Island City, Queens</p></div></article>
         <article class="rental-card bg-white rounded-xl overflow-hidden border border-slate-200 shadow-sm hover:shadow-md transition-all"><div class="relative"><img src="https://images.unsplash.com/photo-1554995207-c18c203602cb?auto=format&fit=crop&w=700&q=80" class="h-48 w-full object-cover" alt="apartment" /><button class="absolute top-3 right-3 w-9 h-9 rounded-full bg-white/90 shadow-md flex items-center justify-center text-lg">♥</button></div><div class="p-4"><div class="flex items-center justify-between"><p class="text-2xl font-extrabold">$5,200<span class="text-sm font-medium text-slate-500">/mo</span></p><span class="text-xs bg-slate-100 rounded-full px-3 py-1 font-semibold">Three Bedroom</span></div><h4 class="mt-2 font-extrabold text-base truncate">Spacious 3BR in Park Slope</h4><p class="text-slate-500 text-sm mt-1">Park Slope, Brooklyn</p></div></article>
@@ -237,13 +232,11 @@
 
   <footer class="border-t border-slate-200 bg-white py-6 text-center text-xs text-slate-500 mt-6"><p>© 2025 Becca's Rental List – Verified listings for New York City</p></footer>
 
-  <!-- Overlay + Bottom Sheet Component (shared for both Advanced Search and Quick Menu) with high z-index -->
+  <!-- Overlay + Bottom Sheet Component -->
   <div id="sheetOverlay" class="sheet-overlay"></div>
   <div id="bottomSheet" class="bottom-sheet">
     <div class="drag-handle"></div>
-    <div class="px-5 pb-6 pt-1" id="sheetDynamicContent">
-      <!-- dynamic content injected via JS -->
-    </div>
+    <div class="px-5 pb-6 pt-1" id="sheetDynamicContent"></div>
   </div>
 
   <script>
@@ -261,88 +254,94 @@
         activeSheetType = null;
       }
 
-      function openSheet(type) {
-        activeSheetType = type;
-        if (type === 'advanced') {
-          sheetContent.innerHTML = `
-            <h3 class="text-lg font-extrabold text-slate-800 mb-3">Advanced Search</h3>
-            <div class="space-y-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Borough</label>
-                <div class="relative">
-                  <select class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none focus:ring-2 focus:ring-teal-300">
-                    <option>All Boroughs</option><option>Manhattan</option><option>Brooklyn</option><option>Queens</option><option>Bronx</option><option>Staten Island</option>
-                  </select>
-                </div>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Neighborhood</label>
-                <select class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm">
-                  <option>All Neighborhoods</option><option>East Harlem</option><option>West Village</option><option>Williamsburg</option><option>Astoria</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Sort by</label>
-                <select class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm">
-                  <option>Newest</option><option>Price: Low to High</option><option>Price: High to Low</option>
-                </select>
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Keyword</label>
-                <input type="text" placeholder="e.g. balcony, doorman" class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm outline-none">
-              </div>
-              <button id="applyAdvancedBtn" class="w-full mt-2 h-12 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-md active:bg-teal-700 transition">Apply Filters</button>
-            </div>
-          `;
-          const applyBtn = document.getElementById('applyAdvancedBtn');
-          if (applyBtn) applyBtn.addEventListener('click', closeSheet);
-        } 
-        else if (type === 'quick') {
-          sheetContent.innerHTML = `
-            <h3 class="text-lg font-extrabold text-slate-800 mb-2">Quick Menu</h3>
-            <div class="divide-y divide-slate-100">
-              <a href="#" class="sheet-option flex items-center justify-between py-3 text-base font-semibold text-slate-700">NYC Apartment Lottery <span class="text-slate-400">›</span></a>
-              <div class="py-2">
-                <div class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-2">Rent Stabilized List</div>
-                <div class="grid grid-cols-2 gap-2">
-                  <a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Manhattan</a>
-                  <a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Brooklyn</a>
-                  <a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Queens</a>
-                  <a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Bronx</a>
-                  <a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Staten Island</a>
-                </div>
-              </div>
-              <div class="pt-3">
-                <div class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-2">Tenant Resources</div>
-                <div class="space-y-2">
-                  <a href="#" class="sheet-option block px-3 py-2 rounded-lg bg-slate-50 text-sm">NYS & NYC Resources</a>
-                  <a href="#" class="sheet-option block px-3 py-2 rounded-lg bg-slate-50 text-sm">Broker Info</a>
-                  <a href="#" class="sheet-option block px-3 py-2 rounded-lg bg-slate-50 text-sm">How to Find Rent Stabilized Status</a>
-                </div>
+      // Function to open advanced sheet (includes map view inside for mobile)
+      function openAdvancedSheet() {
+        activeSheetType = 'advanced';
+        sheetContent.innerHTML = `
+          <h3 class="text-lg font-extrabold text-slate-800 mb-3">Advanced Search</h3>
+          <div class="space-y-4">
+            <!-- MAP VIEW SECTION (embedded inside advanced settings) -->
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 flex items-center gap-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+                Interactive Map Preview
+              </label>
+              <div class="map-placeholder w-full h-48 rounded-xl overflow-hidden border border-slate-200 shadow-inner flex flex-col items-center justify-center bg-gradient-to-br from-teal-50 to-blue-100 cursor-pointer transition hover:shadow-md" id="mapPreviewTrigger">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-teal-600 mb-2" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7" /></svg>
+                <span class="text-sm font-medium text-slate-700">View rental locations map</span>
+                <span class="text-xs text-slate-500 mt-1">Tap to explore neighborhoods</span>
               </div>
             </div>
-            <button id="closeQuickSheet" class="w-full mt-5 h-10 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm active:bg-slate-100 transition">Close</button>
-          `;
-          const closeQuick = document.getElementById('closeQuickSheet');
-          if (closeQuick) closeQuick.addEventListener('click', closeSheet);
-          document.querySelectorAll('#sheetDynamicContent a').forEach(link => {
-            link.addEventListener('click', (e) => {
-              e.preventDefault();
-              closeSheet();
-            });
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Borough</label>
+              <select class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm">
+                <option>All Boroughs</option><option>Manhattan</option><option>Brooklyn</option><option>Queens</option><option>Bronx</option><option>Staten Island</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Neighborhood</label>
+              <select class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm">
+                <option>All Neighborhoods</option><option>East Harlem</option><option>West Village</option><option>Williamsburg</option><option>Astoria</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Sort by</label>
+              <select class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm">
+                <option>Newest</option><option>Price: Low to High</option><option>Price: High to Low</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1">Keyword</label>
+              <input type="text" placeholder="e.g. balcony, doorman" class="w-full h-11 rounded-xl border border-slate-200 bg-slate-50 px-3 text-sm">
+            </div>
+            <button id="applyAdvancedBtn" class="w-full mt-2 h-12 rounded-xl bg-teal-600 text-white font-bold text-sm shadow-md active:bg-teal-700 transition">Apply Filters</button>
+          </div>
+        `;
+        const applyBtn = document.getElementById('applyAdvancedBtn');
+        if (applyBtn) applyBtn.addEventListener('click', closeSheet);
+        const mapTrigger = document.getElementById('mapPreviewTrigger');
+        if (mapTrigger) {
+          mapTrigger.addEventListener('click', () => {
+            alert('Interactive map would open here: showing listings across NYC neighborhoods.');
           });
         }
-        
         sheet.classList.add('open');
         overlay.classList.add('visible');
         document.body.classList.add('sheet-open');
       }
 
-      const advancedBtn = document.getElementById('mobileAdvancedBtn');
-      const quickMenuBtn = document.getElementById('mobileQuickMenuBtn');
+      function openQuickSheet() {
+        activeSheetType = 'quick';
+        sheetContent.innerHTML = `
+          <h3 class="text-lg font-extrabold text-slate-800 mb-2">Quick Menu</h3>
+          <div class="divide-y divide-slate-100">
+            <a href="#" class="sheet-option flex items-center justify-between py-3 text-base font-semibold text-slate-700">NYC Apartment Lottery <span class="text-slate-400">›</span></a>
+            <div class="py-2"><div class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-2">Rent Stabilized List</div><div class="grid grid-cols-2 gap-2"><a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Manhattan</a><a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Brooklyn</a><a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Queens</a><a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Bronx</a><a href="#" class="sheet-option bg-slate-50 rounded-lg px-3 py-2 text-sm text-center">Staten Island</a></div></div>
+            <div class="pt-3"><div class="font-bold text-slate-800 text-sm uppercase tracking-wide mb-2">Tenant Resources</div><div class="space-y-2"><a href="#" class="sheet-option block px-3 py-2 rounded-lg bg-slate-50 text-sm">NYS & NYC Resources</a><a href="#" class="sheet-option block px-3 py-2 rounded-lg bg-slate-50 text-sm">Broker Info</a><a href="#" class="sheet-option block px-3 py-2 rounded-lg bg-slate-50 text-sm">How to Find Rent Stabilized Status</a></div></div>
+          </div>
+          <button id="closeQuickSheet" class="w-full mt-5 h-10 rounded-xl border border-slate-300 text-slate-700 font-medium text-sm active:bg-slate-100 transition">Close</button>
+        `;
+        const closeQuick = document.getElementById('closeQuickSheet');
+        if (closeQuick) closeQuick.addEventListener('click', closeSheet);
+        document.querySelectorAll('#sheetDynamicContent a').forEach(link => {
+          link.addEventListener('click', (e) => { e.preventDefault(); closeSheet(); });
+        });
+        sheet.classList.add('open');
+        overlay.classList.add('visible');
+        document.body.classList.add('sheet-open');
+      }
+
+      // Desktop map view handler (standalone alert)
+      const desktopMapBtn = document.getElementById('desktopMapViewBtn');
+      if (desktopMapBtn) {
+        desktopMapBtn.addEventListener('click', () => { alert('Desktop map view: interactive map integration would appear here.'); });
+      }
       
-      if (advancedBtn) advancedBtn.addEventListener('click', (e) => { e.preventDefault(); openSheet('advanced'); });
-      if (quickMenuBtn) quickMenuBtn.addEventListener('click', (e) => { e.preventDefault(); openSheet('quick'); });
+      // Mobile: two buttons
+      const mobileAdvanced = document.getElementById('mobileAdvancedBtn');
+      const mobileQuick = document.getElementById('mobileQuickMenuBtn');
+      if (mobileAdvanced) mobileAdvanced.addEventListener('click', (e) => { e.preventDefault(); openAdvancedSheet(); });
+      if (mobileQuick) mobileQuick.addEventListener('click', (e) => { e.preventDefault(); openQuickSheet(); });
       
       overlay.addEventListener('click', closeSheet);
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && sheet.classList.contains('open')) closeSheet(); });
